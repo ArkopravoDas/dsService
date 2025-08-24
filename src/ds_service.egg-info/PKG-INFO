@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: ds-service
+Version: 1.0
+Requires-Dist: backports.tarfile==1.2.0
+Requires-Dist: flask==3.1.1
+Requires-Dist: importlib-metadata==8.0.0
+Requires-Dist: jaraco.collections==5.1.0
+Requires-Dist: kafka-python==2.2.15
+Requires-Dist: langchain-community==0.3.27
+Requires-Dist: langchain-mistralai==0.2.11
+Requires-Dist: langchain-openai==0.3.28
+Requires-Dist: tinycss2==1.4.0
+Requires-Dist: tomli==2.0.1
+Dynamic: requires-dist
