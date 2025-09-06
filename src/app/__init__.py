@@ -14,24 +14,30 @@ kafka_port = os.getenv('KAFKA_PORT', '9092')
 kafka_bootstrap_servers = f"{kafka_host}:{kafka_port}"
 print("Kafka server is "+kafka_bootstrap_servers)
 print("\n")
+
 producer = KafkaProducer(bootstrap_servers=kafka_bootstrap_servers,
                          value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 @app.route('/v1/ds/message', methods=['POST'])
 def handle_message():
+    user_id = request.headers.get('x-user-id')
+    if not user_id:
+        return jsonify({'error': 'x-user-id header is required'}), 400
+
     message = request.json.get('message')
     result = messageService.process_message(message)
-    # serialized_result = result.json()
-
+    result['user_id'] = user_id
     # Send the serialized result to the Kafka topic
     producer.send('expense_service', result)
-
-    return jsonify(result), 200
+    return jsonify(result)
 
 @app.route('/', methods=['GET'])
 def handle_get():
     return 'Hello world'
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return 'OK'
 
 if __name__ == "__main__":
     app.run(host="localhost", port= 8010, debug=True)
